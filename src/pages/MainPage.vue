@@ -1,8 +1,6 @@
 <script setup lang="ts">
      import CryptList from "../components/CryptList.vue";
-     import MainCover from "../components/MainCover.vue";
      import PortfolioCover from "../components/PortfolioCover.vue";
-     import Common from "../components/Common.vue";
      import { useCryptStore } from "@/stores/crypts.store";
      import { onBeforeMount, ref } from "vue";
      import { usePortfolioStore } from "@/stores/portfolio.store";
