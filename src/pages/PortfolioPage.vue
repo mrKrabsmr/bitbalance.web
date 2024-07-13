@@ -82,10 +82,15 @@
      }
 
      const updatePurchase = async (obj: object) => {
-          await beforeDoPurchase()
-          const ok = await portfolioStore.updateData(obj, obj.id)
-          if (ok) {
-               portfolioStore.fetchData(true)
+          try {
+               await beforeDoPurchase()
+               const ok = await portfolioStore.updateData(obj, obj.id)
+               if (ok) {
+                    portfolioStore.fetchData(true)
+               }
+               obj.error = ""
+          } catch (error) {
+               obj.error = "проверьте корректность заполненных данных"
           }
      }
 
@@ -247,7 +252,8 @@
                                              Комменатрий: <br>
                                              <textarea class="textarea_update" type="string"
                                                   v-model="purchase.commentary" @input="purchase.changed = true">
-                                        </textarea>
+                                             </textarea>
+                                             <div class="upd_error" v-if="purchase.error">{{ purchase.error }}</div>
                                         </div>
                                         <div class="e__delete" title="Удалить">
                                              <button @click="showDeletingForm = true; deletingID = purchase.id">
@@ -357,8 +363,6 @@
      }
 
      .portfolio__header {
-          margin-top: 1vh;
-          height: 10vh;
 
           .total_sum {
                right: 0;
@@ -617,6 +621,12 @@
           }
      }
 
+     .upd_error {
+          color: red;
+          text-transform: lowercase;
+          margin-top: 5px;
+     }
+
      .deleting_form {
           height: 150px;
           width: 400px;
@@ -637,10 +647,13 @@
           }
 
           .element {
+               box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, .3);
                font-size: 11px;
+               border-radius: 10px;
 
                &__rowable {
                     padding: 0 2px;
+                    border-radius: 10px;
 
                     .e {
                          padding: 6px 2px;
@@ -698,6 +711,10 @@
           .deleting_form {
                height: 150px;
                width: 350px;
+          }
+
+          .upd_error {
+               font-size: 9px;
           }
      }
 </style>

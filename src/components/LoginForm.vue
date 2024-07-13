@@ -3,6 +3,8 @@
     import { type LoginDTO, type RegisterDTO } from "@/services/dto/user.dto"
     import { useRoute } from "vue-router";
 
+    const screenW = ref(window.innerWidth)
+
     const route = useRoute()
 
     const hiddenLoginForm = ref(true)
@@ -11,6 +13,11 @@
     const emits = defineEmits({
         loginSubmit: (form: LoginDTO) => form,
         registerSubmit: (form: RegisterDTO) => form,
+    })
+
+    const props = defineProps({
+        errorLogin: String,
+        errorRegister: String
     })
 
     const loginSubmit = () => {
@@ -43,7 +50,7 @@
     const disabledRegisterSubmit = computed(() => {
         return (
             registerForm.value.username === "" || registerForm.value.password === "" || registerForm.value.confirm_password === ""
-        ) || (registerForm.value.password != registerForm.value.confirm_password)
+        ) || (registerForm.value.password.length < 8) || (!registerForm.value.password.match(/^[0-9a-z]+$/)) || (registerForm.value.password != registerForm.value.confirm_password)
 
     })
 
@@ -81,8 +88,10 @@
                 <input v-model="loginForm.password" type="password" placeholder="Введите пароль" class="input__value">
             </div>
             <div class="form__item">
+                <div class="error" v-if="props.errorLogin != ''">{{ props.errorLogin }}</div>
                 <button class="form__button" :disabled="disabledLoginSubmit"
-                    :class="{ 'cursor-not-allowed': disabledLoginSubmit }" @click="loginSubmit">
+                    :class="{ 'cursor-not-allowed': disabledLoginSubmit, 'bg-gray-400': disabledLoginSubmit && screenW < 768, 'bg-[#06044d]': !disabledLoginSubmit && screenW < 768 }"
+                    @click="loginSubmit">
                     Подтвердить
                 </button>
             </div>
@@ -107,16 +116,18 @@
                 <div class="label">Пароль</div>
                 <input v-model="registerForm.password" type="password" placeholder="Введите пароль"
                     class="input__value">
-
+                <div class="help">минимум 8 символов, латинские буквы и арабские цифры</div>
             </div>
             <div class="form__item">
                 <div class="label">Подвердить пароль</div>
                 <input v-model="registerForm.confirm_password" type="password" placeholder="Введите пароль еще раз"
                     class="input__value">
             </div>
+            <div class="error" v-if="props.errorRegister != ''">{{ props.errorRegister }}</div>
             <div class="form__item">
                 <button class="form__button" :disabled="disabledRegisterSubmit"
-                    :class="{ 'cursor-not-allowed': disabledRegisterSubmit }" @click="registerSubmit">
+                    :class="{ 'cursor-not-allowed': disabledRegisterSubmit, 'bg-gray-400': disabledRegisterSubmit && screenW < 768, 'bg-[#06044d]': !disabledRegisterSubmit && screenW < 768 }"
+                    @click="registerSubmit">
                     Подтвердить
                 </button>
             </div>
@@ -158,6 +169,11 @@
 
         margin: 20px auto;
     }
+    
+    .help {
+        font-size: 11px;
+        opacity: .5;
+    }
 
     .label {
         text-align: left;
@@ -187,10 +203,23 @@
         padding: 3px 20px;
         transition: background-color .7s linear;
 
-        &:hover {
-            background-color: #06044d;
+        @media (max-width: 768px) {
             color: #fff;
         }
+
+        @media (min-width: 768px) {
+            &:hover {
+                background-color: #06044d;
+                color: #fff;
+            }
+        }
+    }
+
+    .error {
+        color: red;
+        text-transform: lowercase;
+        width: 75%;
+        margin: 0 auto;
     }
 
     @media (max-width: 768px) {
@@ -214,6 +243,15 @@
                 max-width: 200px;
                 font-size: 14px;
             }
+
+            .help {
+                font-size: 8px;
+            }
+
+        }
+
+        .error {
+            font-size: 10px;
         }
 
 

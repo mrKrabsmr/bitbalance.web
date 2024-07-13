@@ -5,6 +5,9 @@ export function trunc(n: number): number {
      }
 
      const afterDot = n.toString().split(".")[1]
+     if (!afterDot) {
+          return 0
+     }
 
      let count = 1
      for (let el of afterDot) {

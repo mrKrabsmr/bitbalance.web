@@ -47,12 +47,9 @@ export const useUserStore = defineStore("user", {
 
             return true
         },
-        async login(form: LoginDTO): Promise<boolean> {
+        async login(form: LoginDTO): Promise<string> {
             try {
                 const response = await login(form)
-                if (response.error) {
-                    return false
-                }
 
                 this.user = {
                     isBoss: false,
@@ -63,18 +60,14 @@ export const useUserStore = defineStore("user", {
                 cookies.set("refresh", response.data.refresh_token, {"expires": "30d"})
                 cookies.set("username", response.data.username)
                 
-                return true
+                return ""
             } catch (error) {
-                console.log(error)
-                return false
+                return "неверные данные для входа"
             }
         },
-        async register(form: RegisterDTO): Promise<boolean> {
+        async register(form: RegisterDTO): Promise<string> {
             try {
                 const response = await register(form)
-                if (response.error) {
-                    return false
-                }
 
                 this.user = {
                     isBoss: false,
@@ -85,10 +78,10 @@ export const useUserStore = defineStore("user", {
                 cookies.set("refresh", response.data.refresh_token, {"expires": "30d"})
                 cookies.set("username", response.data.username)
 
-                return true
+                return ""
             } catch (error) {
-                console.log(error)
-                return false
+                alert(error.response.status)
+                return "пользователь с таким именем пользователя уже существует"
             }
         }
     }

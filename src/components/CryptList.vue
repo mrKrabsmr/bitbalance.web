@@ -122,7 +122,7 @@
           font-size: 16px;
 
           @media (max-width: 768px) {
-               font-size: 12px;
+               font-size: 11px;
                padding: 5px 3px;
           }
      }
@@ -131,7 +131,7 @@
           cursor: s-resize;
 
           @media (max-width: 768px) {
-               font-size: 11px;
+               font-size: 10px;
                padding: 4px 2px;
           }
 

@@ -3,36 +3,40 @@
     import LoginForm from "../components/LoginForm.vue";
     import { type LoginDTO, type RegisterDTO } from "../services/dto/user.dto.ts"
     import { useUserStore } from "@/stores/user.store";
+    import { ref } from "vue";
 
     const store = useUserStore();
     const router = useRouter();
 
-    const usersLogin = async (form: LoginDTO) => {
-        const response = await store.login(form);
+    const errorLogin = ref("")
+    const errorRegister = ref("")
 
-        if (response) {
-            await router.push("/")
-            window.location.href = "/"
-        } else {
-            alert("Неверные учетные данные")
+    const usersLogin = async (form: LoginDTO) => {
+        const error = await store.login(form);
+        if (error != "") {
+            errorLogin.value = error
+            return
         }
+
+        await router.push("/")
+        window.location.href = "/"
     }
 
     const usersRegister = async (form: RegisterDTO) => {
-        const response = await store.register(form);
-
-        if (response) {
-            await router.push("/")
-            window.location.href = "/"
-        } else {
-            alert("Пользователь с таким username уже существует")
+        const error = await store.register(form);
+        if (error != "") {
+            errorRegister.value = error
+            return
         }
+
+        await router.push("/")
+        window.location.href = "/"
     }
 
 </script>
 
 <template>
-    <login-form @loginSubmit="usersLogin" @registerSubmit="usersRegister"></login-form>
+    <login-form @loginSubmit="usersLogin" @registerSubmit="usersRegister" :errorLogin="errorLogin" :errorRegister="errorRegister"></login-form>
 </template>
 
 <style scoped></style>

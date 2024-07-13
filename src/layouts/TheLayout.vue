@@ -58,7 +58,7 @@
         <div class="header">
             <div class="container">
                 <div class="header__line">
-                    <div class="logo">bit.Balance</div>
+                    <div class="logo"><span class="logo__prefix">bit</span><span class="logo__suffix">balance</span></div>
                     <div class="dynamic">
                         <div class="account" v-if="isAuth">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -124,7 +124,35 @@
     }
 
     .logo {
-        font-size: 25px;
+        text-transform: uppercase;
+        border-left: 2px #fff ridge;
+        padding-left: 6px;
+        font-weight: 300;
+        text-shadow: 0px 0px 1px;
+        display: flex;
+        flex-direction: column;
+        
+        &__prefix {
+            font-size: 14px;
+            height: 10px;
+            letter-spacing: 8px;
+            font-weight: 900;
+            width: 100%;
+
+            &__line {
+                background-color: #fff;
+                border: 1px #fff solid;
+                position: relative;
+                width: 50%;
+            }
+
+        }
+
+        &__suffix {
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 3px;
+        }
     }
 
     .dynamic {
@@ -208,6 +236,16 @@
 
         .header {
             height: 9vh;
+        }
+
+        .logo {
+            &__prefix {
+                font-size: 10px;
+            }
+
+            &__suffix {
+                font-size: 12px;
+            }
         }
 
         .meta {
